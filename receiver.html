@@ -15,7 +15,7 @@
     <script type='text/javascript'>
       function updateLocation(url, user, password) {
         window.castReceiverManager.setApplicationState('Now Playing: ' + url);
-        const urlToNavigate= new URl(url);
+        const urlToNavigate= new URL(url);
         if( user ) {
           urlToNavigate.username = user;
           urlToNavigate.password = password;
