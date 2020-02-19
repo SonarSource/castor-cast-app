@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cast Receiver</title>
+
+    <style type='text/css'>
+      html, body {width: 100%; height: 100%; padding: 0; margin: 0;}
+      body {overflow:hidden; background: #000;}
+      #iframe {width: 100%; height: 100%;}
+    </style>
+  </head>
+
+  <body>
+    <script type='text/javascript' src='//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js'></script>
+    <script type='text/javascript'>
+      function updateLocation(url) {
+        window.castReceiverManager.setApplicationState('Now Playing: ' + url);
+        window.location.href = url;
+      }
+
+      window.onload = function() {
+        cast.receiver.logger.setLevelValue(0);
+        window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+
+        castReceiverManager.onReady = function(event) {
+          window.castReceiverManager.setApplicationState('URL Cast ready...');
+        };
+
+        window.messageBus = window.castReceiverManager.getCastMessageBus('urn:x-cast:com.my.cast');
+
+        window.messageBus.onMessage = function(e) {
+          var msg = JSON.parse(e.data);
+          updateLocation(msg.url);
+        };
+
+        // initialize CastReceiverManager
+        window.castReceiverManager.start({statusText: 'URL Cast starting...'});
+      };
+    </script>
+  </body>
+</html>
