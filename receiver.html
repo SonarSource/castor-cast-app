@@ -13,9 +13,14 @@
   <body>
     <script type='text/javascript' src='//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js'></script>
     <script type='text/javascript'>
-      function updateLocation(url) {
+      function updateLocation(url, user, password) {
         window.castReceiverManager.setApplicationState('Now Playing: ' + url);
-        window.location.href = url;
+        const urlToNavigate= new URl(url);
+        if( user ) {
+          urlToNavigate.username = user;
+          urlToNavigate.password = password;
+        }
+        window.location.href = urlToNavigate.toString();
       }
 
       window.onload = function() {
@@ -30,7 +35,7 @@
 
         window.messageBus.onMessage = function(e) {
           var msg = JSON.parse(e.data);
-          updateLocation(msg.url);
+          updateLocation(msg.url, msg.user, msg.password);
         };
 
         // initialize CastReceiverManager
